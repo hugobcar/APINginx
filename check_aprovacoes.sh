@@ -6,7 +6,7 @@
 #                                   Hugo Branquinho de Carvalho - 27/01/2017
 ############################################################################
 
-rm -f /tmp/msg_slack_md5
+rm -f /tmp/msg_aprovados
 
 ######### Veriaveis
 # Slack

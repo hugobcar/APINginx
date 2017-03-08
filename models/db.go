@@ -15,12 +15,22 @@ var PortDB string
 
 // ValidaUser - Used for check user and password is OK
 func ValidaUser(user, password, tipoUser string) (retorno bool) {
+	var SQLSelect string
+
 	db, err := sql.Open("mysql", UserDB+":"+PassDB+"@tcp("+HostDB+":"+PortDB+")/"+DatabaseDB+"?charset=utf8")
 	checkErr(err)
 
 	defer db.Close()
 
-	rows, err := db.Query("SELECT COUNT(nome_usuario) FROM usuarios WHERE ativo=1 AND usuario='" + user + "' AND senha='" + password + "' AND admin='" + tipoUser + "'")
+	// Se tipoUser = 0 quer dizer que nao eh necessario ser admin para efetuar validacao
+	if tipoUser == "0" {
+		SQLSelect = "SELECT COUNT(nome_usuario) FROM usuarios WHERE ativo=1 AND usuario='" + user + "' AND senha='" + password + "'"
+	} else {
+		SQLSelect = "SELECT COUNT(nome_usuario) FROM usuarios WHERE ativo=1 AND usuario='" + user + "' AND senha='" + password + "' AND admin='" + tipoUser + "'"
+	}
+
+	rows, err := db.Query(SQLSelect)
+
 	checkErr(err)
 
 	for rows.Next() {

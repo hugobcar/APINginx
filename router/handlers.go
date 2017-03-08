@@ -328,12 +328,6 @@ func aplicarMapsAPP(i int, w http.ResponseWriter, idArquivo, locationPrefix, loc
 
 	resp1.ServerOrigem = server
 
-	//log.Println(resp1.ServerOrigem)
-
-	// if err := json.NewEncoder(w).Encode(resp1); err != nil {
-	// 	panic(err)
-	// }
-
 	if resp1.Status == "ERRO" {
 		c <- "ERRO"
 		md5 <- "ERRO"
@@ -360,11 +354,6 @@ func deletarMapsAPP(i int, w http.ResponseWriter, idArquivo, server string, c ch
 
 	resp1.ServerOrigem = server
 
-	//log.Println(resp1.ServerOrigem)
-
-	// if err := json.NewEncoder(w).Encode(resp1); err != nil {
-	// 	panic(err)
-	// }
 	if resp1.Status == "ERRO" {
 		c <- "ERRO"
 	} else {
@@ -388,12 +377,6 @@ func testProxyAPP(i int, w http.ResponseWriter, proxypass, server string, c, cMs
 	}
 
 	resp1.ServerOrigem = server
-
-	//log.Println(resp1.ServerOrigem)
-
-	//	if err := json.NewEncoder(w).Encode(resp1); err != nil {
-	//		panic(err)
-	//	}
 
 	if resp1.Status == "ERRO" {
 		c <- "ERRO"
@@ -941,24 +924,12 @@ func AplicarMapsAPP(w http.ResponseWriter, r *http.Request) {
 						if chamaGoRoutinesDeletarMapsAPP(w, argsAplicarProxy.Env, IDArq, "APP") {
 							log.Println("ERRO ao deletar mapeamento APP (ID: " + IDArq + " -- Location: /" + locationPrefix[i] + "/" + location[i] + " -- ProxyPass: " + proxyPass[i] + " -- Env: " + argsAplicarProxy.Env)
 
-							// resp := jsonRetornoPadrao{Msg: "ERRO ao tentar deletar arquivo de mapeamento APP.", Status: "ERRO"}
-
-							// if err := json.NewEncoder(w).Encode(resp); err != nil {
-							// 	panic(err)
-							// }
-
 							apagarRegistroDB = "nao"
 						}
 
 						// Delete mapeamento DMZ
 						if chamaGoRoutinesDeletarMapsAPP(w, argsAplicarProxy.Env, IDArq, "DMZ") {
 							log.Println("ERRO ao deletar mapeamento APP (ID: " + IDArq + " -- Location: /" + locationPrefix[i] + "/" + location[i] + " -- ProxyPass: " + proxyPass[i] + " -- Env: " + argsAplicarProxy.Env)
-
-							// resp := jsonRetornoPadrao{Msg: "ERRO ao tentar deletar arquivo de mapeamento DMZ.", Status: "ERRO"}
-
-							// if err := json.NewEncoder(w).Encode(resp); err != nil {
-							// 	panic(err)
-							// }
 
 							apagarRegistroDB = "nao"
 						} else {
@@ -996,12 +967,6 @@ func AplicarMapsAPP(w http.ResponseWriter, r *http.Request) {
 								// Delete mapeamento de arquivos que deram problemas
 								if chamaGoRoutinesDeletarMapsAPP(w, argsAplicarProxy.Env, IDArq, "DMZ") {
 									log.Println("ERRO ao deletar mapeamento DMZ (ID: " + IDArq + " -- Location: /" + locationPrefix[i] + "/" + location[i] + " -- ProxyPass: " + proxyPass[i] + " -- Env: " + argsAplicarProxy.Env)
-
-									// resp := jsonRetornoPadrao{Msg: "ERRO ao tentar deletar arquivo de mapeamento.", Status: "ERRO"}
-
-									// if err := json.NewEncoder(w).Encode(resp); err != nil {
-									// 	panic(err)
-									// }
 								}
 
 								temErro = true
@@ -1034,12 +999,6 @@ func AplicarMapsAPP(w http.ResponseWriter, r *http.Request) {
 								// Delete mapeamento de arquivos que deram problemas
 								if chamaGoRoutinesDeletarMapsAPP(w, argsAplicarProxy.Env, IDArq, "APP") {
 									log.Println("ERRO ao deletar mapeamento APP (ID: " + IDArq + " -- Location: /" + locationPrefix[i] + "/" + location[i] + " -- ProxyPass: " + proxyPass[i] + " -- Env: " + argsAplicarProxy.Env)
-
-									// resp := jsonRetornoPadrao{Msg: "ERRO ao tentar deletar arquivo de mapeamento.", Status: "ERRO"}
-
-									// if err := json.NewEncoder(w).Encode(resp); err != nil {
-									// 	panic(err)
-									// }
 								}
 
 								temErro = true
@@ -1055,23 +1014,11 @@ func AplicarMapsAPP(w http.ResponseWriter, r *http.Request) {
 									// Delete mapeamento de arquivos que deram problemas
 									if chamaGoRoutinesDeletarMapsAPP(w, argsAplicarProxy.Env, IDArq, "DMZ") {
 										log.Println("ERRO ao deletar mapeamento DMZ (" + IDArq + ") http://UPSTREAM/" + locationPrefix[i] + "/" + location[i])
-
-										// resp := jsonRetornoPadrao{Msg: "ERRO ao tentar deletar arquivo de mapeamento.", Status: "ERRO"}
-
-										// if err := json.NewEncoder(w).Encode(resp); err != nil {
-										// 	panic(err)
-										// }
 									}
 
 									// Delete mapeamento de arquivos que deram problemas
 									if chamaGoRoutinesDeletarMapsAPP(w, argsAplicarProxy.Env, IDArq, "APP") {
 										log.Println("ERRO ao deletar mapeamento APP (ID: " + IDArq + " -- Location: /" + locationPrefix[i] + "/" + location[i] + " -- ProxyPass: " + proxyPass[i] + " -- Env: " + argsAplicarProxy.Env)
-
-										// resp := jsonRetornoPadrao{Msg: "ERRO ao tentar deletar arquivo de mapeamento.", Status: "ERRO"}
-
-										// if err := json.NewEncoder(w).Encode(resp); err != nil {
-										// 	panic(err)
-										// }
 									}
 
 									temErro = true

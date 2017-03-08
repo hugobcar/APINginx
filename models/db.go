@@ -20,7 +20,7 @@ func ValidaUser(user, password, tipoUser string) (retorno bool) {
 
 	defer db.Close()
 
-	rows, err := db.Query("SELECT COUNT(nome_usuario) FROM usuarios WHERE ativo=1 AND usuario='" + user + "' AND senha='" + password + "' AND admin='1'")
+	rows, err := db.Query("SELECT COUNT(nome_usuario) FROM usuarios WHERE ativo=1 AND usuario='" + user + "' AND senha='" + password + "' AND admin='" + tipoUser + "'")
 	checkErr(err)
 
 	for rows.Next() {

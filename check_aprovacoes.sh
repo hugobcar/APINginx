@@ -6,7 +6,7 @@
 #                                   Hugo Branquinho de Carvalho - 27/01/2017
 ############################################################################
 
-rm -f /tmp/msg_aprovados
+rm -f /tmp/msg_aprovados 
 
 ######### Veriaveis
 # Slack
@@ -26,7 +26,7 @@ if [ `whoami` != 'hugo' ]; then
 	exit 1
 fi
 
-check_aprovado=`mysql -u ${userDB} --password=${passDB} -P ${portDB} -e "use ${dbDB}; SELECT count(1) AS APROVADO FROM mapeamentos WHERE mapeamentos.aprovado<>1" | grep -v APROVADO`
+check_aprovado=`mysql -u ${userDB} --password=${passDB} -P ${portDB} -e "use ${dbDB}; SELECT count(1) AS APROVADO FROM mapeamentos WHERE mapeamentos.aprovado<>1 AND mapeamentos.alertou_slack=0" | grep -v APROVADO`
 
 if [ "${check_aprovado}" -ge 1 ]; then
 	echo "Enviando mensagem no slack de aprovacoes a se fazer"
@@ -35,10 +35,13 @@ if [ "${check_aprovado}" -ge 1 ]; then
 	echo "---------------------------------" >> /tmp/msg_aprovados
 	echo >> /tmp/msg_aprovados
 
-	mysql -u ${userDB} --password=${passDB} -P ${portDB} -e "use ${dbDB}; SELECT CONCAT('Solicitante: ',usuarios.nome_usuario,'  -  Mapeamento: (',mapeamentos.id_mapeamento,') /',mapeamentos.location_prefix,'/',mapeamentos.location,' (', mapeamentos.env,')') AS APROVADO FROM mapeamentos INNER JOIN usuarios ON (mapeamentos.id_usuario=usuarios.id_usuario) WHERE mapeamentos.aprovado<>1" | grep -v APROVADO >> /tmp/msg_aprovados
+	mysql -u ${userDB} --password=${passDB} -P ${portDB} -e "use ${dbDB}; SELECT CONCAT('Solicitante: ',usuarios.nome_usuario,'  -  Mapeamento: (',mapeamentos.id_mapeamento,') /',mapeamentos.location_prefix,'/',mapeamentos.location,' (', mapeamentos.env,')') AS APROVADO FROM mapeamentos INNER JOIN usuarios ON (mapeamentos.id_usuario=usuarios.id_usuario) WHERE mapeamentos.aprovado<>1 AND mapeamentos.alertou_slack=0" | grep -v APROVADO >> /tmp/msg_aprovados
 
 	json="{\"channel\": \"${canal_slack}\", \"text\": \"$(cat /tmp/msg_aprovados)\"}"
 	curl -s -d "payload=$json" ${webhook_slack}
+
+	# Atualiza tabela falando que ja foi enviado o alerta no slack
+	mysql -u ${userDB} --password=${passDB} -P ${portDB} -e "use ${dbDB}; UPDATE apinginx.mapeamentos SET alertou_slack=1 WHERE mapeamentos.aprovado<>1 AND mapeamentos.alertou_slack=0"
 else
 	echo "Nenhuma aprovacao a se fazer"
 fi

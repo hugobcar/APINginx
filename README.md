@@ -1,4 +1,4 @@
-# Alterar variables MySQL. Example:
+# Alterar variables MySQL. Exemplo:
 
 userDB="apinginx"
 

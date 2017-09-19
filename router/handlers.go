@@ -445,6 +445,12 @@ func writeFile(path string, locationPrefix, location, proxyPass, owner, consumir
 	checkError(err)
 	_, err = file.WriteString("\tproxy_pass " + proxyPass + ";\n")
 	checkError(err)
+	_, err = file.WriteString("\tproxy_connect_timeout 600;\n")
+	checkError(err)
+	_, err = file.WriteString("\tproxy_send_timeout 600;\n")
+	checkError(err)
+	_, err = file.WriteString("\tproxy_read_timeout 600; \n")
+	checkError(err)
 	_, err = file.WriteString("}\n\n")
 	checkError(err)
 
